@@ -37,7 +37,7 @@ historyMap.on('load', async () => {
     source: 'hexagons',
     paint: {
       'fill-color': sinceYearColorExpr(),
-      'fill-opacity': 0.75,
+      'fill-opacity': 0.5,
     },
   });
 
@@ -118,55 +118,20 @@ function onHexLeave() {
   popup.remove();
 }
 
-// Build tooltip HTML showing ward history as a timeline.
+// Build tooltip HTML showing ward assignment per redistricting year.
 function buildTooltip(props) {
-  const segments = wardSegments(props);
   const notInCity1923 = props.ward1923 === 0 || props.ward1923 === '0';
 
   const header = notInCity1923
     ? '<strong>Not in city in 1923</strong>'
     : '<strong>Ward history</strong>';
 
-  const rows = segments.map(s => {
-    const end = s.end === 2023 ? 'Present' : s.end;
-    return `<div class="ward-segment">${s.start}–${end}: <span>Ward ${s.ward}</span></div>`;
-  }).join('');
+  const rows = HIST_YEARS
+    .filter(y => Number(props[`ward${y}`]) !== 0)
+    .map(y => `<div class="ward-segment">${y}: <span>Ward ${Number(props[`ward${y}`])}</span></div>`)
+    .join('');
 
   return `<div class="hex-tooltip">${header}${rows || '<div class="ward-segment">No ward data</div>'}</div>`;
-}
-
-// Collapse consecutive identical wards into labeled segments.
-function wardSegments(props) {
-  const segments = [];
-  let current = null;
-  let segStart = null;
-
-  for (let i = 0; i < HIST_YEARS.length; i++) {
-    const year = HIST_YEARS[i];
-    const ward = Number(props[`ward${year}`]);
-
-    if (ward === 0) {
-      if (current !== null) {
-        segments.push({ ward: current, start: segStart, end: HIST_YEARS[i - 1] });
-        current = null;
-      }
-      continue;
-    }
-
-    if (ward !== current) {
-      if (current !== null) {
-        segments.push({ ward: current, start: segStart, end: HIST_YEARS[i - 1] });
-      }
-      current = ward;
-      segStart = year;
-    }
-  }
-
-  if (current !== null) {
-    segments.push({ ward: current, start: segStart, end: 2023 });
-  }
-
-  return segments;
 }
 
 // Address search using Nominatim (OpenStreetMap), no API key required.
