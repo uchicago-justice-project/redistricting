@@ -66,8 +66,13 @@ historyMap.on('load', async () => {
     historyMap.setFilter('ward-lines', ['==', ['get', 'year'], Number(e.target.value)]);
   });
 
-  historyMap.on('mousemove', 'hex-fill', onHexHover);
-  historyMap.on('mouseleave', 'hex-fill', onHexLeave);
+  if ('ontouchstart' in window) {
+    historyMap.on('click', 'hex-fill', onHexHover);
+    historyMap.on('click', onMapClick);
+  } else {
+    historyMap.on('mousemove', 'hex-fill', onHexHover);
+    historyMap.on('mouseleave', 'hex-fill', onHexLeave);
+  }
 
   initAddressSearch();
   hideLoading('history-loading');
@@ -101,6 +106,11 @@ function onHexHover(e) {
   historyMap.getCanvas().style.cursor = 'pointer';
   const props = e.features[0].properties;
   popup.setLngLat(e.lngLat).setHTML(buildTooltip(props)).addTo(historyMap);
+}
+
+function onMapClick(e) {
+  const features = historyMap.queryRenderedFeatures(e.point, { layers: ['hex-fill'] });
+  if (!features.length) popup.remove();
 }
 
 function onHexLeave() {
