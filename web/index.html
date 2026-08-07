@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago's Untouched Communities</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Chicago's Untouched Communities</h1>
+    <p class="subtitle">Since 1923 the boundaries of Chicago's Wards have constantly changed, carving up communities, but some areas always remained in the same ward.</p>
+  </header>
+
+  <section id="ward-slider-section">
+    <div class="slider-legend">
+      <div class="legend-item"><span class="swatch" style="background:#4a90d9"></span>Unchanged since 1923</div>
+      <div class="legend-item"><span class="swatch" style="background:#e8521a"></span>Ward changed</div>
+    </div>
+    <div class="ward-img-wrap">
+      <img id="ward-img" src="./images/ward_1923.png" alt="Chicago wards" />
+    </div>
+    <div class="slider-row">
+      <span class="year-display" id="real-year">1923</span>
+      <input type="range" id="year-slider" />
+    </div>
+  </section>
+
+  <div class="interstitial">
+    <p>Placeholder text goes here. This could describe the second map or provide additional context about ward stability over time.</p>
+  </div>
+
+  <section id="ward-history-section">
+    <div class="ward-year-select">
+      <label for="ward-year-picker">Ward boundaries</label>
+      <select id="ward-year-picker">
+        <option value="2023">2023</option>
+        <option value="2015">2015</option>
+        <option value="2005">2005</option>
+        <option value="1995">1995</option>
+        <option value="1985">1985</option>
+        <option value="1981">1981</option>
+        <option value="1970">1970</option>
+        <option value="1961">1961</option>
+        <option value="1947">1947</option>
+        <option value="1931">1931</option>
+        <option value="1923">1923</option>
+      </select>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="address-input" placeholder="Enter a Chicago address…" autocomplete="off" />
+      <button id="search-btn">Go</button>
+      <span class="search-error" id="search-error"></span>
+    </div>
+    <div class="map-container">
+      <div id="history-map" class="map"></div>
+      <div class="map-legend" id="history-legend">
+        <div class="legend-title">Stable since</div>
+        <div class="legend-item"><span class="swatch" style="background:#0d3b34"></span>1923</div>
+        <div class="legend-item"><span class="swatch" style="background:#1a6b5e"></span>1947</div>
+        <div class="legend-item"><span class="swatch" style="background:#2a9d8f"></span>1970</div>
+        <div class="legend-item"><span class="swatch" style="background:#66bdb6"></span>1995</div>
+        <div class="legend-item"><span class="swatch" style="background:#b2e2dd"></span>2015</div>
+        <div class="legend-item"><span class="legend-line"></span>Ward boundaries</div>
+      </div>
+      <div class="loading-overlay" id="history-loading">Loading map data…</div>
+    </div>
+  </section>
+
+  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
+  <script src="js/ward-slider.js"></script>
+  <script src="js/ward-history.js"></script>
+</body>
+</html>

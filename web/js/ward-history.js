@@ -1,0 +1,210 @@
+// Interactive 2: Ward stability gradient map.
+// Color encodes when a hexagon's ward last changed; hover shows full ward history.
+// Address search via Nominatim (no API key required).
+
+const HIST_YEARS = [1923, 1931, 1947, 1961, 1970, 1981, 1985, 1995, 2005, 2015, 2023];
+const HIST_CHICAGO = { center: [-87.6298, 41.8781], zoom: 9 };
+
+const historyMap = new maplibregl.Map({
+  container: 'history-map',
+  style: 'https://tiles.openfreemap.org/styles/bright',
+  center: HIST_CHICAGO.center,
+  zoom: HIST_CHICAGO.zoom,
+});
+
+historyMap.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+const popup = new maplibregl.Popup({
+  closeButton: false,
+  closeOnClick: false,
+  maxWidth: '260px',
+});
+
+let searchMarker = null;
+
+historyMap.on('load', async () => {
+  const [hexData, wardData] = await Promise.all([
+    fetch('./data/chicago_hexagons_web.geojson').then(r => r.json()),
+    fetch('./data/chicago_wards_all_years.geojson').then(r => r.json()),
+  ]);
+
+  historyMap.addSource('hexagons', { type: 'geojson', data: hexData });
+  historyMap.addSource('ward-lines', { type: 'geojson', data: wardData });
+
+  historyMap.addLayer({
+    id: 'hex-fill',
+    type: 'fill',
+    source: 'hexagons',
+    paint: {
+      'fill-color': sinceYearColorExpr(),
+      'fill-opacity': 0.75,
+    },
+  });
+
+  historyMap.addLayer({
+    id: 'hex-outline',
+    type: 'line',
+    source: 'hexagons',
+    paint: {
+      'line-color': 'rgba(0,0,0,0.12)',
+      'line-width': 0.3,
+    },
+  });
+
+  historyMap.addLayer({
+    id: 'ward-lines',
+    type: 'line',
+    source: 'ward-lines',
+    filter: ['==', ['get', 'year'], 2023],
+    paint: {
+      'line-color': '#333333',
+      'line-width': 1,
+    },
+  });
+
+  document.getElementById('ward-year-picker').addEventListener('change', e => {
+    historyMap.setFilter('ward-lines', ['==', ['get', 'year'], Number(e.target.value)]);
+  });
+
+  historyMap.on('mousemove', 'hex-fill', onHexHover);
+  historyMap.on('mouseleave', 'hex-fill', onHexLeave);
+
+  initAddressSearch();
+  hideLoading('history-loading');
+});
+
+// Discrete 5-category color scheme matching update_wards.py (viridis palette).
+// Breaks: stable since 2015, 1995, 1975, 1947, 1923.
+// since_year = 0 means the hexagon was never assigned a ward (not in city).
+const SINCE_COLORS = {
+  2015: '#b2e2dd',  // lightest teal — most recent change
+  1995: '#66bdb6',
+  1970: '#2a9d8f',
+  1947: '#1a6b5e',
+  1923: '#0d3b34',  // darkest teal — most stable
+  none: '#cccccc',  // gray — not in city
+};
+
+function sinceYearColorExpr() {
+  return [
+    'case',
+    ['==', ['get', 'since_year'], 0],     SINCE_COLORS.none,
+    ['>=', ['get', 'since_year'], 2015],  SINCE_COLORS[2015],
+    ['>=', ['get', 'since_year'], 1995],  SINCE_COLORS[1995],
+    ['>=', ['get', 'since_year'], 1970],  SINCE_COLORS[1970],
+    ['>=', ['get', 'since_year'], 1947],  SINCE_COLORS[1947],
+    SINCE_COLORS[1923],
+  ];
+}
+
+function onHexHover(e) {
+  historyMap.getCanvas().style.cursor = 'pointer';
+  const props = e.features[0].properties;
+  popup.setLngLat(e.lngLat).setHTML(buildTooltip(props)).addTo(historyMap);
+}
+
+function onHexLeave() {
+  historyMap.getCanvas().style.cursor = '';
+  popup.remove();
+}
+
+// Build tooltip HTML showing ward history as a timeline.
+function buildTooltip(props) {
+  const segments = wardSegments(props);
+  const notInCity1923 = props.ward1923 === 0 || props.ward1923 === '0';
+
+  const header = notInCity1923
+    ? '<strong>Not in city in 1923</strong>'
+    : '<strong>Ward history</strong>';
+
+  const rows = segments.map(s => {
+    const end = s.end === 2023 ? 'Present' : s.end;
+    return `<div class="ward-segment">${s.start}–${end}: <span>Ward ${s.ward}</span></div>`;
+  }).join('');
+
+  return `<div class="hex-tooltip">${header}${rows || '<div class="ward-segment">No ward data</div>'}</div>`;
+}
+
+// Collapse consecutive identical wards into labeled segments.
+function wardSegments(props) {
+  const segments = [];
+  let current = null;
+  let segStart = null;
+
+  for (let i = 0; i < HIST_YEARS.length; i++) {
+    const year = HIST_YEARS[i];
+    const ward = Number(props[`ward${year}`]);
+
+    if (ward === 0) {
+      if (current !== null) {
+        segments.push({ ward: current, start: segStart, end: HIST_YEARS[i - 1] });
+        current = null;
+      }
+      continue;
+    }
+
+    if (ward !== current) {
+      if (current !== null) {
+        segments.push({ ward: current, start: segStart, end: HIST_YEARS[i - 1] });
+      }
+      current = ward;
+      segStart = year;
+    }
+  }
+
+  if (current !== null) {
+    segments.push({ ward: current, start: segStart, end: 2023 });
+  }
+
+  return segments;
+}
+
+// Address search using Nominatim (OpenStreetMap), no API key required.
+function initAddressSearch() {
+  document.getElementById('search-btn').addEventListener('click', geocode);
+  document.getElementById('address-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') geocode();
+  });
+}
+
+async function geocode() {
+  const input = document.getElementById('address-input');
+  const errorEl = document.getElementById('search-error');
+  const query = input.value.trim();
+  errorEl.textContent = '';
+
+  if (!query) return;
+
+  // Bias toward Chicago with a bounding box
+  const chicagoBbox = '-88.0,41.6,-87.2,42.1';
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', Chicago, IL')}&format=json&limit=1&countrycodes=us&bounded=1&viewbox=${chicagoBbox}`;
+
+  try {
+    const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+    const results = await res.json();
+
+    if (!results.length) {
+      errorEl.textContent = 'Address not found.';
+      return;
+    }
+
+    const { lon, lat, display_name } = results[0];
+    const lngLat = [parseFloat(lon), parseFloat(lat)];
+
+    historyMap.flyTo({ center: lngLat, zoom: 15, duration: 900 });
+
+    if (searchMarker) searchMarker.remove();
+    searchMarker = new maplibregl.Marker({ color: '#e8521a' })
+      .setLngLat(lngLat)
+      .setPopup(new maplibregl.Popup().setText(display_name))
+      .addTo(historyMap);
+  } catch {
+    errorEl.textContent = 'Search failed — please try again.';
+  }
+}
+
+function hideLoading(id) {
+  const el = document.getElementById(id);
+  el.classList.add('hidden');
+  setTimeout(() => el.remove(), 350);
+}
