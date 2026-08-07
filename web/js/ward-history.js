@@ -7,7 +7,7 @@ const HIST_CHICAGO = { center: [-87.6298, 41.8781], zoom: 9 };
 
 const historyMap = new maplibregl.Map({
   container: 'history-map',
-  style: 'https://tiles.openfreemap.org/styles/bright',
+  style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
   center: HIST_CHICAGO.center,
   zoom: HIST_CHICAGO.zoom,
 });
@@ -46,7 +46,7 @@ historyMap.on('load', async () => {
     type: 'line',
     source: 'hexagons',
     paint: {
-      'line-color': 'rgba(0,0,0,0.12)',
+      'line-color': 'rgba(255,255,255,0.1)',
       'line-width': 0.3,
     },
   });
@@ -57,7 +57,7 @@ historyMap.on('load', async () => {
     source: 'ward-lines',
     filter: ['==', ['get', 'year'], 2023],
     paint: {
-      'line-color': '#333333',
+      'line-color': '#cccccc',
       'line-width': 1,
     },
   });

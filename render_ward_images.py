@@ -18,9 +18,9 @@ from shapely.geometry import shape
 
 YEARS = [1923, 1931, 1947, 1961, 1970, 1981, 1985, 1995, 2005, 2015, 2023]
 
-COLOR_NEVER_CHANGED = "#4a90d9"
-COLOR_CHANGED       = "#e8521a"
-COLOR_BOUNDARY      = "#333333"
+BG_COLOR            = "#0f0f0f"
+COLOR_NEVER_CHANGED = "#c0392b"
+COLOR_BOUNDARY      = "#aaaaaa"
 
 ROOT     = Path(__file__).parent
 HEX_PATH = ROOT / "web" / "data" / "chicago_hexagons_web.geojson"
@@ -33,25 +33,16 @@ FIG_W, FIG_H = 16, 8    # inches — 2:1 ratio matches the map container
 DPI = 120                # → 1920×960 px
 
 
-def first_change_year(props):
-    """First year this hex changed wards (cumulative), or None if never."""
-    if int(props.get("ward1923", 0) or 0) == 0:
-        for y in YEARS:
-            if int(props.get(f"ward{y}", 0) or 0) != 0:
-                return y
-        return None  # never in city
-    for y in YEARS[1:]:
-        if int(props.get(f"changed_in_{y}", 0) or 0) == 1:
-            return y
-    return None  # never changed
-
-
 def main():
     print("Loading hexagons…")
     hex_gdf = gpd.read_file(HEX_PATH)
-    hex_gdf["_fcy"] = hex_gdf.apply(
-        lambda row: first_change_year(row.to_dict()), axis=1
-    )
+
+    # Static classification: based on full 1923–2023 history.
+    # never_changed_wards=1 means the hex was in city in 1923 and never moved wards.
+    in_city      = hex_gdf["never_changed_wards"].notna()
+    never_changed = hex_gdf[hex_gdf["never_changed_wards"] == 1]
+    changed       = hex_gdf[(hex_gdf["never_changed_wards"] == 0) &
+                             (hex_gdf["ward2023"].fillna(0).astype(int) != 0)]
 
     print("Loading ward boundaries…")
     wrd_gdf = gpd.read_file(WRD_PATH)
@@ -69,25 +60,13 @@ def main():
         ax.set_xlim(minx - pad_x, maxx + pad_x)
         ax.set_ylim(miny - pad_y, maxy + pad_y)
         ax.axis("off")
-        fig.patch.set_facecolor("white")
-        ax.set_facecolor("white")
+        fig.patch.set_facecolor(BG_COLOR)
+        ax.set_facecolor(BG_COLOR)
 
-        # Classify hexagons for this year
-        in_city = hex_gdf[f"ward{year}"].fillna(0).astype(int) != 0
-        has_changed = hex_gdf["_fcy"].apply(
-            lambda fcy: fcy is not None and fcy <= year
-        )
-
-        never_changed = hex_gdf[in_city & ~has_changed]
-        changed       = hex_gdf[in_city & has_changed]
-
-        # Plot hexagon fills
+        # Only color hexagons that never changed — others stay white
         if not never_changed.empty:
             never_changed.plot(ax=ax, color=COLOR_NEVER_CHANGED,
                                linewidth=0, antialiased=True)
-        if not changed.empty:
-            changed.plot(ax=ax, color=COLOR_CHANGED,
-                         linewidth=0, antialiased=True)
 
         # Ward boundaries for this year
         wards_yr = wrd_gdf[wrd_gdf["year"] == year]
@@ -99,7 +78,7 @@ def main():
         ax.text(
             0.02, 0.5, f"{year} Wards",
             transform=ax.transAxes,
-            fontsize=22, color="#222222",
+            fontsize=22, color="#cccccc",
             fontfamily="monospace",
             fontweight="normal",
             va="center", ha="left",
@@ -108,7 +87,7 @@ def main():
         plt.tight_layout(pad=0)
         out = OUT_DIR / f"ward_{year}.png"
         fig.savefig(out, dpi=DPI, bbox_inches="tight",
-                    facecolor="white", pad_inches=0.05)
+                    facecolor=BG_COLOR, pad_inches=0.05)
         plt.close(fig)
 
         size_kb = out.stat().st_size // 1024
