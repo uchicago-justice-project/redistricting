@@ -325,6 +325,7 @@ section {
   font-size: 0.8rem;
 }
 
+
 .hex-tooltip .ward-segment { color: var(--text-muted); }
 .hex-tooltip .ward-segment span { color: var(--text); }
 
