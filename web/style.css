@@ -22,90 +22,175 @@ body {
   line-height: 1.6;
 }
 
-/* Constrain all content to max-width, centered */
-header,
-section {
+
+/* ── 1. Intro split ───────────────────────────────────────────────── */
+
+.intro-split {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
   max-width: var(--max-w);
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+  margin: 0 auto;
+  padding: 4rem 2.5rem;
+  min-height: 60vh;
 }
 
-/* Header */
-header {
-  padding-top: 2rem;
-  padding-bottom: 1rem;
-  text-align: center;
+.intro-text {
+  flex: 1;
+  min-width: 0;
 }
 
-header h1 {
+.intro-text h1 {
   font-size: 2rem;
   font-weight: normal;
   letter-spacing: 0.01em;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.intro-map-col {
+  flex: 0 0 500px;
+  max-width: 500px;
+}
+
+
+/* ── 2. Scroll split ──────────────────────────────────────────────── */
+
+.scroll-split {
+  display: flex;
+  gap: 3rem;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  align-items: flex-start;
+}
+
+.scroll-text {
+  flex: 1;
+  min-width: 0;
+  padding-top: 3rem;
+  padding-bottom: 25vh;
+}
+
+.scroll-text h2 {
+  font-size: 1.15rem;
+  font-weight: normal;
+  color: var(--text);
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+.scroll-text h2:first-child { margin-top: 0; }
+
+.scroll-text p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
   margin-bottom: 1rem;
 }
 
-.subtitle {
-  max-width: 620px;
-  margin: 0 auto;
+.scroll-text em { font-style: italic; color: var(--text); }
+
+.year-list {
+  font-family: var(--mono);
+  font-size: 0.82rem;
   color: var(--text-muted);
-  font-size: 1rem;
-  line-height: 1.7;
+  letter-spacing: 0.03em;
+  line-height: 1.9;
+  padding: 0.5rem 0;
 }
 
-/* Sections */
-section {
+.scroll-map-col {
+  flex: 0 0 50%;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
-.section-header {
-  max-width: 680px;
-  margin-bottom: 1.75rem;
+.map-controls {
+  flex-shrink: 0;
+  padding-bottom: 0.75rem;
 }
 
-.section-header h2 {
-  font-size: 1.25rem;
+.scroll-map-col .map-container {
+  flex: 1;
+  min-height: 0;
+}
+
+.scroll-map-col .map {
+  height: 100%;
+}
+
+
+/* ── 3. About section ─────────────────────────────────────────────── */
+
+.about-section {
+  border-top: 1px solid var(--border);
+  padding: 4rem 2.5rem;
+}
+
+.about-content {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.about-content h2 {
+  font-size: 1.4rem;
   font-weight: normal;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.about-content h3 {
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--text);
+  margin-top: 2rem;
   margin-bottom: 0.5rem;
 }
 
-.section-header p {
+.about-content p {
   color: var(--text-muted);
   font-size: 0.9rem;
+  line-height: 1.8;
+  margin-bottom: 0.9rem;
 }
 
-/* Interstitial text between sections */
-.interstitial {
-  max-width: var(--max-w);
-  margin-left: auto;
-  margin-right: auto;
-  padding: 2rem 2.5rem;
+.about-content ul {
+  list-style: none;
+  padding: 0;
 }
 
-.interstitial p {
-  max-width: 620px;
+.about-content ul li {
   color: var(--text-muted);
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
-/* Map container */
-.map-container {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  padding-left: 1rem;
   position: relative;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--border);
 }
 
-.map {
-  width: 100%;
-  height: 560px;
+.about-content ul li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
 }
 
-/* Wrapper constrains width and gives legend an anchor */
+.about-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.about-link:hover { text-decoration: underline; }
+
+
+/* ── Slider map components ────────────────────────────────────────── */
+
 .ward-img-wrap {
   position: relative;
   display: block;
@@ -120,18 +205,16 @@ section {
   height: auto;
 }
 
-/* Legend above the map image */
 .slider-legend {
   display: flex;
   gap: 1.25rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
   font-size: 0.8rem;
 }
 
-/* Slider row — matches image width */
 .slider-row {
   display: flex;
   align-items: center;
@@ -171,7 +254,21 @@ section {
 
 #year-slider::-webkit-slider-thumb:hover { background: #6aaee8; }
 
-/* Ward year selector */
+
+/* ── Interactive map components ───────────────────────────────────── */
+
+.map-container {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.map {
+  width: 100%;
+  height: 560px;
+}
+
 .ward-year-select {
   display: flex;
   align-items: center;
@@ -196,13 +293,11 @@ section {
 
 .ward-year-select select:focus { border-color: var(--accent); }
 
-/* Address search */
 .search-bar {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
-  max-width: 480px;
+  margin-bottom: 0;
 }
 
 #address-input {
@@ -231,6 +326,7 @@ section {
   font-size: 0.85rem;
   padding: 0.5rem 1rem;
   transition: background 0.15s;
+  white-space: nowrap;
 }
 
 #search-btn:hover { background: #6aaee8; }
@@ -241,7 +337,6 @@ section {
   font-size: 0.8rem;
 }
 
-/* Legend */
 .map-legend {
   position: absolute;
   bottom: 1.5rem;
@@ -278,11 +373,6 @@ section {
   flex-shrink: 0;
 }
 
-.swatch-outline {
-  background: transparent;
-  border: 1px solid #aaa;
-}
-
 .legend-line {
   display: inline-block;
   width: 20px;
@@ -292,8 +382,6 @@ section {
   align-self: center;
 }
 
-
-/* Loading overlay */
 .loading-overlay {
   position: absolute;
   inset: 0;
@@ -310,7 +398,6 @@ section {
 
 .loading-overlay.hidden { opacity: 0; }
 
-/* Tooltip */
 .hex-tooltip {
   font-family: var(--mono);
   font-size: 0.78rem;
@@ -325,11 +412,9 @@ section {
   font-size: 0.8rem;
 }
 
-
 .hex-tooltip .ward-segment { color: var(--text-muted); }
 .hex-tooltip .ward-segment span { color: var(--text); }
 
-/* MapLibre popup override */
 .maplibregl-popup-content {
   background: rgba(20,20,20,0.97) !important;
   border: 1px solid var(--border) !important;
@@ -339,3 +424,48 @@ section {
 }
 
 .maplibregl-popup-tip { display: none; }
+
+
+/* ── Mobile ───────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .intro-split {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2.5rem 1.5rem;
+    min-height: unset;
+  }
+
+  .intro-map-col {
+    flex: none;
+    width: 100%;
+    max-width: 500px;
+    align-self: center;
+  }
+
+  .scroll-split {
+    flex-direction: column;
+    padding: 0 1.5rem;
+    gap: 0;
+  }
+
+  .scroll-text {
+    padding-bottom: 2.5rem;
+  }
+
+  .scroll-map-col {
+    position: static;
+    height: 70vh;
+    flex: none;
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .scroll-map-col .map {
+    height: 100%;
+  }
+
+  .about-section {
+    padding: 3rem 1.5rem;
+  }
+}
