@@ -206,7 +206,6 @@ async function geocode() {
     if (searchMarker) searchMarker.remove();
     searchMarker = new maplibregl.Marker({ color: '#e8521a' })
       .setLngLat(lngLat)
-      .setPopup(new maplibregl.Popup().setText(display_name))
       .addTo(historyMap);
   } catch {
     errorEl.textContent = 'Search failed — please try again.';
