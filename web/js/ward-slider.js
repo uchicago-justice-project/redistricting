@@ -5,7 +5,7 @@ const REDIST_YEARS = [1923, 1931, 1947, 1961, 1970, 1981, 1985, 1995, 2005, 2015
 const YEAR_MIN = 1923;
 const YEAR_MAX = 2023;
 
-const SPEED    = 7;    // real years per second during travel
+const SPEED    = 10;   // real years per second during travel
 const DWELL_S  = 0.4;  // seconds to pause when hitting a redistricting year
 
 (function () {

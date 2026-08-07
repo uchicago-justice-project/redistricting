@@ -95,14 +95,14 @@ def main():
             wards_yr.plot(ax=ax, facecolor="none",
                           edgecolor=COLOR_BOUNDARY, linewidth=0.8)
 
-        # Year label — bottom left, subtle
+        # Year label — middle left
         ax.text(
-            0.02, 0.04, f"{year} Wards",
+            0.02, 0.5, f"{year} Wards",
             transform=ax.transAxes,
             fontsize=22, color="#222222",
             fontfamily="monospace",
             fontweight="normal",
-            va="bottom", ha="left",
+            va="center", ha="left",
         )
 
         plt.tight_layout(pad=0)

@@ -74,6 +74,13 @@ def combine_ward_shapefiles():
     combined = pd.concat(frames, ignore_index=True)
     combined = gpd.GeoDataFrame(combined, crs="EPSG:4326")
 
+    # Clip all ward polygons to the 2023 Chicago boundary so historical
+    # wards never extend beyond the current city limits.
+    chicago_2023_union = gdf_2023.geometry.unary_union
+    combined["geometry"] = combined.geometry.intersection(chicago_2023_union)
+    combined = combined[~combined.geometry.is_empty].reset_index(drop=True)
+    print(f"  Clipped to 2023 boundary: {len(combined)} features remain")
+
     out_path = OUTPUT_DIR / "chicago_wards_all_years.geojson"
     combined.to_file(out_path, driver="GeoJSON")
     print(f"Wrote {len(combined)} features -> {out_path}")
