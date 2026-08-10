@@ -23,7 +23,7 @@
         <input type="range" id="year-slider" />
       </div>
       <div class="slider-legend">
-        <div class="legend-item"><span class="swatch" style="background:#c0392b"></span>Unchanged since 1923</div>
+        <div class="legend-item"><span class="swatch" style="background:#b2e2dd"></span>Unchanged since 1923</div>
       </div>
     </div>
   </div>
@@ -63,22 +63,6 @@
 
     <div class="scroll-map-col">
       <div class="map-controls">
-        <div class="ward-year-select">
-          <label for="ward-year-picker">Ward boundaries</label>
-          <select id="ward-year-picker">
-            <option value="2023">2023</option>
-            <option value="2015">2015</option>
-            <option value="2005">2005</option>
-            <option value="1995">1995</option>
-            <option value="1985">1985</option>
-            <option value="1981">1981</option>
-            <option value="1970">1970</option>
-            <option value="1961">1961</option>
-            <option value="1947">1947</option>
-            <option value="1931">1931</option>
-            <option value="1923">1923</option>
-          </select>
-        </div>
         <div class="search-bar">
           <input type="text" id="address-input" placeholder="Enter a Chicago address…" autocomplete="off" />
           <button id="search-btn">Go</button>
@@ -89,12 +73,11 @@
         <div id="history-map" class="map"></div>
         <div class="map-legend" id="history-legend">
           <div class="legend-title">Stable since</div>
-          <div class="legend-item"><span class="swatch" style="background:#0d3b34"></span>1923</div>
-          <div class="legend-item"><span class="swatch" style="background:#1a6b5e"></span>1947</div>
+          <div class="legend-item"><span class="swatch" style="background:#b2e2dd"></span>1923</div>
+          <div class="legend-item"><span class="swatch" style="background:#66bdb6"></span>1947</div>
           <div class="legend-item"><span class="swatch" style="background:#2a9d8f"></span>1970</div>
-          <div class="legend-item"><span class="swatch" style="background:#66bdb6"></span>1995</div>
-          <div class="legend-item"><span class="swatch" style="background:#b2e2dd"></span>2015</div>
-          <div class="legend-item"><span class="legend-line"></span>Ward boundaries</div>
+          <div class="legend-item"><span class="swatch" style="background:#1a6b5e"></span>1995</div>
+          <div class="legend-item"><span class="swatch" style="background:#0d3b34"></span>2015</div>
         </div>
         <div class="loading-overlay" id="history-loading">Loading map data…</div>
       </div>

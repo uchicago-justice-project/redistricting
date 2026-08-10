@@ -19,7 +19,7 @@ from shapely.geometry import shape
 YEARS = [1923, 1931, 1947, 1961, 1970, 1981, 1985, 1995, 2005, 2015, 2023]
 
 BG_COLOR            = "#0f0f0f"
-COLOR_NEVER_CHANGED = "#c0392b"
+COLOR_NEVER_CHANGED = "#b2e2dd"
 COLOR_BOUNDARY      = "#aaaaaa"
 
 ROOT     = Path(__file__).parent

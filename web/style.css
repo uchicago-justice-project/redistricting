@@ -247,12 +247,12 @@ body {
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #b2e2dd;
   cursor: pointer;
   transition: background 0.15s;
 }
 
-#year-slider::-webkit-slider-thumb:hover { background: #6aaee8; }
+#year-slider::-webkit-slider-thumb:hover { background: #cceae7; }
 
 
 /* ── Interactive map components ───────────────────────────────────── */

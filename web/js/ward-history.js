@@ -23,13 +23,13 @@ const popup = new maplibregl.Popup({
 let searchMarker = null;
 
 historyMap.on('load', async () => {
-  const [hexData, wardData] = await Promise.all([
+  const [hexData, communityData] = await Promise.all([
     fetch('./data/chicago_hexagons_web.geojson').then(r => r.json()),
-    fetch('./data/chicago_wards_all_years.geojson').then(r => r.json()),
+    fetch('./data/chicago_community_areas.geojson').then(r => r.json()),
   ]);
 
   historyMap.addSource('hexagons', { type: 'geojson', data: hexData });
-  historyMap.addSource('ward-lines', { type: 'geojson', data: wardData });
+  historyMap.addSource('community-areas', { type: 'geojson', data: communityData });
 
   historyMap.addLayer({
     id: 'hex-fill',
@@ -52,18 +52,23 @@ historyMap.on('load', async () => {
   });
 
   historyMap.addLayer({
-    id: 'ward-lines',
-    type: 'line',
-    source: 'ward-lines',
-    filter: ['==', ['get', 'year'], 2023],
-    paint: {
-      'line-color': '#cccccc',
-      'line-width': 1,
+    id: 'community-labels',
+    type: 'symbol',
+    source: 'community-areas',
+    layout: {
+      'text-field': ['get', 'community'],
+      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 8, 8, 12, 16],
+      'text-letter-spacing': 0.08,
+      'text-anchor': 'center',
+      'symbol-placement': 'point',
+      'text-max-width': 8,
     },
-  });
-
-  document.getElementById('ward-year-picker').addEventListener('change', e => {
-    historyMap.setFilter('ward-lines', ['==', ['get', 'year'], Number(e.target.value)]);
+    paint: {
+      'text-color': 'rgba(255,255,255,0.75)',
+      'text-halo-color': 'rgba(0,0,0,0.6)',
+      'text-halo-width': 1.5,
+    },
   });
 
   if ('ontouchstart' in window) {
@@ -78,15 +83,14 @@ historyMap.on('load', async () => {
   hideLoading('history-loading');
 });
 
-// Discrete 5-category color scheme matching update_wards.py (viridis palette).
-// Breaks: stable since 2015, 1995, 1975, 1947, 1923.
+// Discrete 5-category teal scale — lighter = more stable (older).
 // since_year = 0 means the hexagon was never assigned a ward (not in city).
 const SINCE_COLORS = {
-  2015: '#b2e2dd',  // lightest teal — most recent change
-  1995: '#66bdb6',
+  1923: '#b2e2dd',  // lightest teal — most stable
+  1947: '#66bdb6',
   1970: '#2a9d8f',
-  1947: '#1a6b5e',
-  1923: '#0d3b34',  // darkest teal — most stable
+  1995: '#1a6b5e',
+  2015: '#0d3b34',  // darkest teal — most recent change
   none: '#cccccc',  // gray — not in city
 };
 
