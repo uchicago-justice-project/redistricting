@@ -12,7 +12,8 @@
   <!-- ── 1. Intro: title left, animated slider map right ── -->
   <div class="intro-split">
     <div class="intro-text">
-      <h1>Chicago's Untouched Communities</h1>
+      <h1>Chicago Communities Untouched by a Century of Redistricting</h1>
+      <p class="intro-subtitle">The Voting Rights Act made race central to fair maps. As the Supreme Court pulls back, the history of redistricting itself may offer a new way to think about racial inequity in remaps.</p>
     </div>
     <div class="intro-map-col">
       <div class="ward-img-wrap">
@@ -58,17 +59,15 @@
 
       <h2>Find your ward's history</h2>
       <p>Curious about your own block? Chicago has redrawn its wards many times — but maybe not where you live. Enter your address in the map to see how many times your ward has changed, and how long your community has stayed put.</p>
+      <div class="search-bar">
+        <input type="text" id="address-input" placeholder="Enter a Chicago address…" autocomplete="off" />
+        <button id="search-btn">Go</button>
+        <span class="search-error" id="search-error"></span>
+      </div>
 
     </div>
 
     <div class="scroll-map-col">
-      <div class="map-controls">
-        <div class="search-bar">
-          <input type="text" id="address-input" placeholder="Enter a Chicago address…" autocomplete="off" />
-          <button id="search-btn">Go</button>
-          <span class="search-error" id="search-error"></span>
-        </div>
-      </div>
       <div class="map-container">
         <div id="history-map" class="map"></div>
         <div class="map-legend" id="history-legend">
@@ -83,34 +82,36 @@
       </div>
     </div>
 
-  </div>
+    <!-- About sits in left column, map spans both rows -->
+    <div class="about-section">
+      <div class="about-content">
 
-  <!-- ── 3. About / team / methodology ── -->
-  <div class="about-section">
-    <div class="about-content">
+        <h2>About</h2>
+        <img src="./images/logo.png" alt="UChicago Justice Project" class="about-logo" />
 
-      <h2>About</h2>
+        <h3>The UChicago Justice Project</h3>
+        <p>The UChicago Justice Project (UCJP) produces rigorous, independent research on policing, criminal justice, and political inequality in Chicago and beyond. We pair advanced data and geographic analysis with archival and historical research to make visible the structures that shape who gets represented, protected, and served in American cities. We release our data, code, and findings publicly so that residents, journalists, advocates, and policymakers can use them. This project is part of UCJP's ongoing work to bring transparency and evidence to the systems that govern city life.</p>
 
-      <h3>The UChicago Justice Project</h3>
-      <p>The UChicago Justice Project (UCJP) produces rigorous, independent research on policing, criminal justice, and political inequality in Chicago and beyond. We pair advanced data and geographic analysis with archival and historical research to make visible the structures that shape who gets represented, protected, and served in American cities. We release our data, code, and findings publicly so that residents, journalists, advocates, and policymakers can use them. This project is part of UCJP's ongoing work to bring transparency and evidence to the systems that govern city life.</p>
+        <h3>Project team</h3>
+        <ul>
+          <li>Robert Vargas – Professor of Sociology, University of Chicago</li>
+          <li>Paola Del Toro – PhD student, Princeton University</li>
+          <li>Christina Cano – Yale University</li>
+          <li>Xing Zhang – Arizona State University</li>
+          <li>David Hackett – Web Designer</li>
+        </ul>
 
-      <h3>Project team</h3>
-      <ul>
-        <li>Robert Vargas – Professor of Sociology, University of Chicago</li>
-        <li>Paola Del Toro – PhD student, Princeton University (UChicago BA)</li>
-        <li>Christina Cano – Yale University</li>
-        <li>Xing Zhang – Arizona State University</li>
-      </ul>
+        <h3>Methodology</h3>
+        <p>This project reconstructs the history of Chicago's ward boundaries from the city's 19th-century founding to the present and identifies the areas that never changed wards. Our analysis combined three approaches.</p>
+        <p>We digitized Chicago's ward maps from the founding era through the most recent remap and laid a fine hexagonal grid over the city. We chose hexagons over city blocks because, over time, the size of city blocks change. Hexagons provide a stable, though not perfect, way to measure spaces consistently over time. For each hexagon, we determined the last time it changed wards, allowing us to classify every piece of Chicago by how long it has remained in place, from cells that have shifted with nearly every remap to a "core" of cells that have never changed wards at all. Mapping tenure this way lets us see stability and change across the whole city at once, rather than one map at a time.</p>
+        <p>To test whether the untouched areas were systematically linked to Chicago's former independent settlements, we estimated logistic regression models at the census-tract level. Controlling for population size, racial and ethnic composition, income, education, and the foreign-born population, we asked whether tracts located on former settlements were more or less likely to remain in the same ward. They were significantly more likely to stay put, indicating that the pattern is not explained by ordinary demographic differences alone.</p>
+        <p>Finally, we conducted archival research to reconstruct how these communities avoided redistricting. Drawing on historical ward maps, newspaper coverage, records from redistricting lawsuits and city council deliberations, land and property records, and archival collections, we traced three recurring mechanisms: the incorporation of independent settlements into the city, the codification of their boundaries through law and precedent, and the adjudication of redistricting disputes in ways that repeatedly treated these founding areas as "natural" communities not to be divided.</p>
+        <p>Together, these methods let us do more than show that some communities never change wards — they let us explain why, and connect a century of mapmaking decisions to the political inequities visible in Chicago today.</p>
+        <p>Full data and code: <a href="https://github.com/uchicago-justice-project/redistricting" class="about-link">Repository Link</a></p>
 
-      <h3>Methodology</h3>
-      <p>This project reconstructs the history of Chicago's ward boundaries from the city's 19th-century founding to the present and identifies the areas that never changed wards. Our analysis combined three approaches.</p>
-      <p>We digitized Chicago's ward maps from the founding era through the most recent remap and laid a fine hexagonal grid over the city. We chose hexagons over city blocks because, over time, the size of city blocks change. Hexagons provide a stable, though not perfect, way to measure spaces consistently over time. For each hexagon, we determined the last time it changed wards, allowing us to classify every piece of Chicago by how long it has remained in place, from cells that have shifted with nearly every remap to a "core" of cells that have never changed wards at all. Mapping tenure this way lets us see stability and change across the whole city at once, rather than one map at a time.</p>
-      <p>To test whether the untouched areas were systematically linked to Chicago's former independent settlements, we estimated logistic regression models at the census-tract level. Controlling for population size, racial and ethnic composition, income, education, and the foreign-born population, we asked whether tracts located on former settlements were more or less likely to remain in the same ward. They were significantly more likely to stay put, indicating that the pattern is not explained by ordinary demographic differences alone.</p>
-      <p>Finally, we conducted archival research to reconstruct how these communities avoided redistricting. Drawing on historical ward maps, newspaper coverage, records from redistricting lawsuits and city council deliberations, land and property records, and archival collections, we traced three recurring mechanisms: the incorporation of independent settlements into the city, the codification of their boundaries through law and precedent, and the adjudication of redistricting disputes in ways that repeatedly treated these founding areas as "natural" communities not to be divided.</p>
-      <p>Together, these methods let us do more than show that some communities never change wards — they let us explain why, and connect a century of mapmaking decisions to the political inequities visible in Chicago today.</p>
-      <p>Full data and code: <a href="#" class="about-link">[repository link]</a></p>
-
+      </div>
     </div>
+
   </div>
 
   <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>

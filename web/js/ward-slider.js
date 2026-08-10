@@ -1,7 +1,7 @@
 // Interactive 1: hop through pre-rendered PNGs at each redistricting year.
 
 const REDIST_YEARS = [1923, 1931, 1947, 1961, 1970, 1981, 1985, 1995, 2005, 2015, 2023];
-const DWELL_MS = 1000; // ms to pause at each year
+const DWELL_MS = 500; // ms to pause at each year
 
 (function () {
   const img      = document.getElementById('ward-img');

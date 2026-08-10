@@ -46,6 +46,15 @@ body {
   letter-spacing: 0.01em;
   line-height: 1.25;
   color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.intro-subtitle {
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--text-muted);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
 .intro-map-col {
@@ -57,23 +66,26 @@ body {
 /* ── 2. Scroll split ──────────────────────────────────────────────── */
 
 .scroll-split {
-  display: flex;
-  gap: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 3rem;
   max-width: var(--max-w);
   margin: 0 auto;
   padding: 0 2.5rem;
-  align-items: flex-start;
+  align-items: start;
 }
 
 .scroll-text {
-  flex: 1;
+  grid-column: 1;
+  grid-row: 1;
   min-width: 0;
   padding-top: 3rem;
-  padding-bottom: 25vh;
+  padding-bottom: 3rem;
 }
 
 .scroll-text h2 {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: normal;
   color: var(--text);
   margin-top: 2.5rem;
@@ -102,7 +114,8 @@ body {
 }
 
 .scroll-map-col {
-  flex: 0 0 50%;
+  grid-column: 2;
+  grid-row: 1 / 3;  /* span article text and about rows */
   position: sticky;
   top: 0;
   height: 100vh;
@@ -134,15 +147,22 @@ body {
   padding: 4rem 2.5rem;
 }
 
-.about-content {
-  max-width: 680px;
-  margin: 0 auto;
+.about-section {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  padding-bottom: 4rem;
 }
 
-.about-content h2 {
-  font-size: 1.4rem;
-  font-weight: normal;
-  color: var(--text);
+.about-content {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.about-logo {
+  display: block;
+  max-width: 160px;
+  height: auto;
   margin-bottom: 1.5rem;
 }
 
@@ -154,13 +174,6 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.about-content p {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  line-height: 1.8;
-  margin-bottom: 0.9rem;
-}
-
 .about-content ul {
   list-style: none;
   padding: 0;
@@ -168,7 +181,7 @@ body {
 
 .about-content ul li {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   line-height: 1.8;
   padding-left: 1rem;
   position: relative;
@@ -297,6 +310,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 0.75rem;
   margin-bottom: 0;
 }
 
@@ -436,6 +450,10 @@ body {
     min-height: unset;
   }
 
+  .intro-text h1 {
+    text-align: center;
+  }
+
   .intro-map-col {
     flex: none;
     width: 100%;
@@ -444,19 +462,21 @@ body {
   }
 
   .scroll-split {
+    display: flex;
     flex-direction: column;
     padding: 0 1.5rem;
     gap: 0;
   }
 
   .scroll-text {
+    order: 1;
     padding-bottom: 2.5rem;
   }
 
   .scroll-map-col {
+    order: 2;
     position: static;
     height: 70vh;
-    flex: none;
     width: 100%;
     padding-top: 0;
   }
@@ -466,6 +486,7 @@ body {
   }
 
   .about-section {
-    padding: 3rem 1.5rem;
+    order: 3;
+    padding-bottom: 3rem;
   }
 }

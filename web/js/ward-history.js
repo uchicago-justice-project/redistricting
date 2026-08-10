@@ -3,7 +3,7 @@
 // Address search via Nominatim (no API key required).
 
 const HIST_YEARS = [1923, 1931, 1947, 1961, 1970, 1981, 1985, 1995, 2005, 2015, 2023];
-const HIST_CHICAGO = { center: [-87.6298, 41.8781], zoom: 9 };
+const HIST_CHICAGO = { center: [-87.6298, 41.8781], zoom: 10 };
 
 const historyMap = new maplibregl.Map({
   container: 'history-map',
@@ -58,14 +58,14 @@ historyMap.on('load', async () => {
     layout: {
       'text-field': ['get', 'community'],
       'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 8, 8, 12, 16],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 8, 6, 12, 12],
       'text-letter-spacing': 0.08,
       'text-anchor': 'center',
       'symbol-placement': 'point',
       'text-max-width': 8,
     },
     paint: {
-      'text-color': 'rgba(255,255,255,0.75)',
+      'text-color': 'rgba(255,255,255,0.65)',
       'text-halo-color': 'rgba(0,0,0,0.6)',
       'text-halo-width': 1.5,
     },
@@ -78,6 +78,11 @@ historyMap.on('load', async () => {
     historyMap.on('mousemove', 'hex-fill', onHexHover);
     historyMap.on('mouseleave', 'hex-fill', onHexLeave);
   }
+
+  // Hide city/suburb/neighbourhood place labels from the basemap
+  historyMap.getStyle().layers
+    .filter(l => l.type === 'symbol' && l['source-layer'] === 'place')
+    .forEach(l => historyMap.setLayoutProperty(l.id, 'visibility', 'none'));
 
   initAddressSearch();
   hideLoading('history-loading');
