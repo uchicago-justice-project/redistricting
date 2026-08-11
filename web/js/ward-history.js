@@ -3,14 +3,20 @@
 // Address search via Nominatim (no API key required).
 
 const HIST_YEARS = [1923, 1931, 1947, 1961, 1970, 1981, 1985, 1995, 2005, 2015, 2023];
-const HIST_CHICAGO = { center: [-87.6298, 41.8781], zoom: 10 };
+const HIST_CHICAGO = { center: [-87.645, 41.835], zoom: 10 };
 
 const historyMap = new maplibregl.Map({
   container: 'history-map',
   style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
   center: HIST_CHICAGO.center,
   zoom: HIST_CHICAGO.zoom,
+  attributionControl: false,
 });
+historyMap.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+setTimeout(() => {
+  const el = historyMap.getContainer().querySelector('.maplibregl-ctrl-attrib');
+  if (el) el.classList.remove('maplibregl-compact-show');
+}, 0);
 
 historyMap.addControl(new maplibregl.NavigationControl(), 'top-right');
 
