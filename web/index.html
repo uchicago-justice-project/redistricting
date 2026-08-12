@@ -20,15 +20,15 @@
       <p class="intro-subtitle">Amidst attacks on the Voting Rights Act, redistricting history may offer a new way to think about racial inequity in ward maps.</p>
     </div>
     <div class="intro-map-col">
+      <div class="slider-legend">
+        <div class="legend-item"><span class="swatch" style="background:#b2e2dd"></span>Unchanged since 1923</div>
+      </div>
       <div class="ward-img-wrap">
         <img id="ward-img" src="./images/ward_1923.png" alt="Chicago wards" />
       </div>
       <div class="slider-row">
         <span class="year-display" id="real-year">1923</span>
         <input type="range" id="year-slider" />
-      </div>
-      <div class="slider-legend">
-        <div class="legend-item"><span class="swatch" style="background:#b2e2dd"></span>Unchanged since 1923</div>
       </div>
     </div>
   </div>
@@ -38,7 +38,7 @@
 
     <div class="scroll-text">
 
-      <p>When the city council redraws ward maps every decade, it shapes who gets a seat at the table when wards decide where money, services, and attention go. The ward map is a statement about which communities deserve to be kept entirely in one ward, and which ones get split across four, five, or sometimes even six wards. Since the Voting Rights Act of 1965, redistricting has been an important tool for helping Black, Latino, and Asian voters elect representatives of their choice, rather than being cracked apart or packed into a single ward so their political power disappears. The Supreme Court, in <em>Louisiana v. Callais</em>, severely weakened this tool by limiting how much mapmakers may consider racial demographics when drawing district lines. As a result, communities of color will have fewer ways to contest maps that weaken their representation.</p>
+      <p>When the city council redraws ward maps every decade, it shapes who gets a seat at the table when wards decide where money, services, and attention go. The ward map is a statement about which communities deserve to be kept entirely in one ward, and which ones get split across four, five, or sometimes even six wards. Since the Voting Rights Act of 1965, redistricting has been an important tool for helping Black, Latino, and Asian voters elect representatives of their choice, rather than being cracked apart or packed into a single ward so their political power disappears. The Supreme Court, in <em>Louisiana v. Callais 2026</em>, severely weakened this tool by limiting how much mapmakers may consider racial demographics when drawing district lines. As a result, communities of color will have fewer ways to contest maps that weaken their representation.</p>
       <p>This raises an urgent question: if racial demographics become harder to use as a basis for fair maps, what else could? Our research suggests exploring one answer: redistricting history. Some communities have been shielded from redistricting for a century while others have been carved up again and again. Those histories are public record, and they reveal patterns of political inequity grounded in the material past. This site, based on our study published in <em>Geoforum</em>, invites visitors to explore redistricting history as a new basis to think about map fairness. Data for all of Chicago's ward maps, along with our analysis, can be <a href="https://github.com/uchicago-justice-project/redistricting" class="about-link">downloaded here</a>.</p>
 
       <h2>Our historical approach</h2>
@@ -46,6 +46,14 @@
       <p class="year-list">1837 · 1847 · 1857 · 1863 · 1869 · 1876 · 1890 · 1900 · 1910 · 1912 · 1923 · 1931 · 1947 · 1961 · 1970 · 1981 · 1985 · 1995 · 2005 · 2015 · 2023</p>
       <p>We also created a hexagonal grid over the city (with each hexagon roughly the square mileage of a city block) and assigned each hexagon's centroid to the ward in which it resided. We assigned wards to hexagons instead of city blocks because, over the course of Chicago history, the size of city blocks change. Hexagons provide a stable, though not perfect, way to measure spaces consistently over time.</p>
       <p>This allowed us to identify what we call "untouched communities," or the small areas of Chicago that have never changed wards. Once you can see them, the idea of fair maps looks different.</p>
+
+      <h2>Discover the ward history of your address</h2>
+      <p>Curious about your own block's ward history? Enter your address in the map to see how many times your community has changed wards.</p>
+      <div class="search-bar">
+        <input type="text" id="address-input" placeholder="Enter a Chicago address…" autocomplete="off" />
+        <button id="search-btn">Go</button>
+        <span class="search-error" id="search-error"></span>
+      </div>
 
       <h2>Why this matters</h2>
       <p>Redrawing ward boundaries has real consequences, with studies showing it can affect crime rates, 311 service requests, and resource allocation across communities. When a neighborhood is shuffled into a new ward, the connections between residents, their alderperson, and city services are disrupted, and the people living there can pay the price. The reverse is just as important: stability accrues advantages. Political scientists have shown that more representation shapes the flow of public dollars, with politically over-represented areas receiving larger shares of public funds. Communities whose political footing never gets disturbed tend to accumulate resources over time, while communities that are constantly redrawn keep starting over. Neighborhoods untouched by redistricting are exactly the ones best positioned to hold onto political power and public resources, while the neighborhoods that get consistently redrawn absorb the disruption.</p>
@@ -60,15 +68,7 @@
       <p><strong>1.</strong> <strong>The settlements were founded between the 1830s and 1880s.</strong> Before there was a ward map to protect, there were the settlements themselves. After the U.S. took the land from indigenous peoples through the 1821 and 1833 treaties of Chicago, investors bought parcels on the city's edge and incorporated their own towns as residential quarters for white professionals. Paul Cornell founded Hyde Park; Conrad Sulzer, Lake View; Philip Rogers, Rogers Park; Christian Ebinger, Edison Park. These towns built early institutions to defend their property, and this became the foundation for everything to come.</p>
       <p><strong>2.</strong> <strong>Protection was written into state law from 1889–1931.</strong> As Chicago grew by absorbing these towns, their residents worried that annexation meant paying the city's taxes without getting its services in return, or being carved up and outvoted. Illinois answered with the Annexation Act of 1889, which guaranteed that a qualifying settlement, once annexed, "shall constitute a ward" of the city. In one stroke, the state turned a set of private real-estate ventures into permanent political units. Hyde Park, Lake View, Rogers Park and the rest entered Chicago intact, with their core communities represented in city council, and with a legal shield against being split.</p>
       <p><strong>3.</strong> <strong>The courts kept it in place (1931–2015).</strong> State-law protection eventually gave way to a new arena: the courtroom. After the Supreme Court's <em>Reynolds v. Sims</em> (1964) forced governments to redraw districts with equal population, Chicago's ward maps repeatedly ended up in litigation, and judges became the mapmakers' referees. Time and again, they described the founding settlements as "natural areas" of the city that should stay whole. The consequence fell elsewhere. Even when courts found a map discriminatory, such as in <em>Ketchum</em> (1985) and <em>Barnett</em> (1997), they ordered the new majority-Black and majority-Latino wards carved out of existing Black and Latino subareas of the city, and never out of the founding settlements.</p>
-      <p>Three different eras produced the same result across Chicago history. As Chicago enters a post-Voting Rights Act era of ward redistricting, our findings suggest that a new era of codification is approaching that will once again create a basis for legitimizing the city's entrenched neighborhood political inequalities. We hope that sharing this history will provide Chicagoans with a more complete understanding of ward history to inform the drawing of the first post-<em>Callais v. Louisiana</em> ward map.</p>
-
-      <h2>Discover the ward history of your address</h2>
-      <p>Curious about your own block's ward history? Enter your address in the map to see how many times your community has changed wards.</p>
-      <div class="search-bar">
-        <input type="text" id="address-input" placeholder="Enter a Chicago address…" autocomplete="off" />
-        <button id="search-btn">Go</button>
-        <span class="search-error" id="search-error"></span>
-      </div>
+      <p>Three different eras produced the same result across Chicago history. As Chicago enters a post-Voting Rights Act era of ward redistricting, our findings suggest that a new era of codification is approaching that will once again create a basis for legitimizing the city's entrenched neighborhood political inequalities. We hope that sharing this history will provide Chicagoans with a more complete understanding of ward history to inform the drawing of the first post-<em>Louisiana v. Callais 2026</em> ward map.</p>
 
     </div>
 

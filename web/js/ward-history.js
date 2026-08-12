@@ -44,6 +44,7 @@ historyMap.on('load', async () => {
     paint: {
       'fill-color': sinceYearColorExpr(),
       'fill-opacity': 0.5,
+      'fill-antialias': false,
     },
   });
 
@@ -51,11 +52,18 @@ historyMap.on('load', async () => {
     id: 'hex-outline',
     type: 'line',
     source: 'hexagons',
+    layout: { 'visibility': 'none' },
     paint: {
       'line-color': 'rgba(255,255,255,0.1)',
       'line-width': 0.3,
     },
   });
+
+  const updateOutlineVisibility = () => {
+    const visible = historyMap.getZoom() > 11;
+    historyMap.setLayoutProperty('hex-outline', 'visibility', visible ? 'visible' : 'none');
+  };
+  historyMap.on('zoom', updateOutlineVisibility);
 
   historyMap.addLayer({
     id: 'community-labels',
