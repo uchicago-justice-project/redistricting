@@ -185,6 +185,13 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.about-content p {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
 .about-content h3 {
   font-size: 1rem;
   font-weight: normal;
